@@ -288,7 +288,6 @@ def dual_input(label, min_val, max_val, default, key_base, step=1.0, help_text=N
             label="hidden",
             min_value=float(min_val), max_value=float(max_val), step=float(step),
             key=input_key,
-            value=float(st.session_state[key_base]),
             on_change=update_from_input,
             label_visibility="collapsed"
         )
@@ -481,4 +480,5 @@ with btn_col:
         with graph_col:
 
             st.info("👈 Ejecute el modelo para ver la proyección.")
+
 
