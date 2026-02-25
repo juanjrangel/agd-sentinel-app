@@ -421,7 +421,7 @@ with col2:
     fig.add_vline(x=1.1, line_dash="dash", line_color="red")
     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white',
                       xaxis_title="Factor de Seguridad", yaxis_title="Frecuencia")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 # --- 6. MACHINE LEARNING ---
 
@@ -465,7 +465,7 @@ with btn_col:
             fig_ml.add_hline(y=1.1, line_color="red", line_dash="dash")
             fig_ml.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white',
                                 xaxis_title="Año", yaxis_title="Factor de Seguridad", height=450)
-            st.plotly_chart(fig_ml, use_container_width=True)
+            st.plotly_chart(fig_ml, width="stretch")
             
             # --- CORRECCIÓN LÓGICA DE LA ALERTA ---
             if fs_actual < 1.1:
@@ -480,4 +480,5 @@ with btn_col:
                     st.success("✅ PREDICCIÓN: Tendencia estable estimada para los próximos 5 años.")
     else:
         with graph_col:
+
             st.info("👈 Ejecute el modelo para ver la proyección.")
