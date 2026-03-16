@@ -28,7 +28,7 @@ If you already have a working Python 3.9+ environment on your machine, you can r
 ---
 
 ## 📥 3. Offline Portable Version (For users WITHOUT Python installed)
-For fieldwork deployment in environments without internet connectivity, or for users who do not wish to install Python and libraries manually, we have packaged a fully isolated, pre-configured offline environment (approx. 720 MB). 
+For fieldwork deployment in environments without internet connectivity, or for users who do not wish to install Python and libraries manually, we have packaged a fully isolated, pre-configured offline environment (approx. 700 MB). 
 
 This package includes a portable Python distribution (WinPython) and requires **zero external configuration**.
 
