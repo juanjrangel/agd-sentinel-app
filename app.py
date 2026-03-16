@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
-# --- 1. CONFIGURACIÓN DE PÁGINA Y ESTILOS VISUALES ---
+# --- 1. PAGE CONFIGURATION AND VISUAL STYLES ---
 st.set_page_config(
     page_title="AGD-Sentinel | Ingeotecnia",
     page_icon="⛰️",
@@ -16,27 +16,27 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Inyección de CSS "Nuclear"
+# CSS Injection for UI styling
 st.markdown("""
     <style>
-    /* 1. Fondo oscuro global y texto base */
+    /* 1. Global dark background and base text */
     .stApp {
         background-color: #0E1117;
         color: #FAFAFA;
     }
     
-    /* CORRECCIÓN DEL ENCABEZADO */
+    /* HEADER CORRECTION */
     header[data-testid="stHeader"] {
         background-color: #0E1117 !important;
     }
     
-    /* 2. Forzar texto blanco */
+    /* 2. Force white text */
     h1, h2, h3, h4, h5, h6, p, li, span, label {
         color: #FAFAFA !important;
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* 3. INPUTS NUMÉRICOS MEJORADOS */
+    /* 3. IMPROVED NUMERIC INPUTS */
     input[type="number"] {
         color: #FFFFFF !important;
         background-color: #262730 !important;
@@ -54,14 +54,14 @@ st.markdown("""
         margin: 0;
     }
 
-    /* 4. CORRECCIÓN DE TODOS LOS TOOLTIPS NATIVOS */
+    /* 4. NATIVE TOOLTIPS CORRECTION */
     div[data-testid="stTooltipContent"] {
         background-color: #262730 !important; 
         color: #FFFFFF !important; 
         border: 1px solid #464B5C !important;
     }
 
-    /* 5. Estilo de Tarjetas de Métricas */
+    /* 5. Metric Cards Style */
     [data-testid="stMetricLabel"] {
         color: #A3A8B8 !important; 
         font-size: 1rem !important;
@@ -71,7 +71,7 @@ st.markdown("""
         font-size: 1.8rem !important;
     }
 
-    /* 6. SEMÁFORO LED PERSONALIZADO */
+    /* 6. CUSTOM LED INDICATOR FOR ML METRICS */
     .led-container {
         background-color: #262730;
         border: 1px solid #464B5C;
@@ -132,18 +132,18 @@ st.markdown("""
         opacity: 1;
     }
 
-    /* 7. Sliders y Widgets */
+    /* 7. Sliders and Widgets */
     .stSlider label {
         color: #FAFAFA !important;
         font-weight: 500 !important;
     }
     
-    /* 8. Barra Lateral */
+    /* 8. Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #262730 !important;
     }
     
-    /* 9. Botón de Machine Learning */
+    /* 9. Machine Learning Button */
     div.stButton > button:first-child {
         background-color: #FF4B4B; 
         color: white !important;
@@ -165,10 +165,10 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. FUNCIONES AUXILIARES ---
+# --- 2. AUXILIARY FUNCTIONS ---
 
 def get_metric_status(metric_name, value):
-    """Retorna color y mensaje para el semáforo de ML"""
+    """Returns color and status message for the ML evaluation LED indicator."""
     value = round(value, 3) 
     if metric_name == "R2":
         if value >= 0.90:
@@ -194,7 +194,7 @@ def get_metric_status(metric_name, value):
     return "#FFFFFF", "N/A", "Sin datos"
 
 def render_led_metric(label, value, metric_type):
-    """Genera el HTML del Semáforo LED"""
+    """Generates the HTML string for the custom LED metric indicator."""
     color, status, desc = get_metric_status(metric_type, value)
     led_style = f"background-color: {color}; box-shadow: 0 0 10px {color};"
     
@@ -216,7 +216,7 @@ def render_led_metric(label, value, metric_type):
     return html
 
 def calcular_parametros_estimados(spt_n, vs_velocity, resistivity):
-    """Simula correlación datos de campo -> parámetros (MODO AUTOMÁTICO)"""
+    """Simulates field data correlation to geotechnical parameters (AUTOMATIC MODE)."""
     phi = 18 + (spt_n * 0.4) 
     phi = min(max(phi, 15), 35) 
     
@@ -234,26 +234,33 @@ def calcular_parametros_estimados(spt_n, vs_velocity, resistivity):
     return round(phi, 2), round(cohesion, 2), round(gamma, 2)
 
 def factor_seguridad_talud_infinito(c, phi, gamma, alpha_deg, hw_ratio, k_sismo):
-    """Ecuación Talud Infinito"""
+    """Calculates the pseudo-static Factor of Safety (FS) using the Infinite Slope Limit Equilibrium Model."""
     alpha = np.radians(alpha_deg)
     phi_rad = np.radians(phi)
-    gamma_w = 9.81  
-    z = 5.0 
-    hw = z * hw_ratio 
     
+    gamma_w = 9.81  # Unit weight of water (kN/m³)
+    z = 5.0  # Assumed depth of the failure surface (m)
+    hw = z * hw_ratio  # Height of the groundwater table above the failure surface
+    
+    # Resisting forces (Shear strength based on Mohr-Coulomb criterion)
     resistencia = c + (gamma * z - gamma_w * hw) * (np.cos(alpha)**2) * np.tan(phi_rad)
+    
+    # Driving forces (Gravity and pseudo-static seismic loads)
     actuante = (gamma * z * np.sin(alpha) * np.cos(alpha)) + (k_sismo * gamma * z * np.cos(alpha))
     
+    # Prevent division by zero for completely flat terrains
     if actuante <= 0.1: return 10.0 
+    
     return resistencia / actuante
 
-# --- 3. INTERFAZ (SIDEBAR CON INPUTS SINCRONIZADOS ROBUSTOS) ---
+# --- 3. USER INTERFACE (SIDEBAR WITH ROBUST SYNCHRONIZED INPUTS) ---
 
 def dual_input(label, min_val, max_val, default, key_base, step=1.0, help_text=None):
-    """Crea un slider y un input numérico que se sincronizan bidireccionalmente."""
+    """Creates a slider and numeric input that are bidirectionally synchronized via Streamlit Session State to optimize memory handling."""
     slider_key = f"{key_base}_slider"
     input_key = f"{key_base}_input"
     
+    # Initialize Session State variables to prevent recursive callback errors
     if key_base not in st.session_state:
         st.session_state[key_base] = default
         if slider_key not in st.session_state: st.session_state[slider_key] = default
@@ -279,7 +286,7 @@ def dual_input(label, min_val, max_val, default, key_base, step=1.0, help_text=N
         st.slider(
             label="hidden",
             min_value=float(min_val), max_value=float(max_val), step=float(step),
-            key=slider_key, 
+            key=slider_key,
             on_change=update_from_slider,
             label_visibility="collapsed"
         )
@@ -297,8 +304,7 @@ with st.sidebar:
     st.title("🎛️ Panel de Campo")
     st.markdown("---")
     
-    # ---------------- SECCIÓN 1: SENSORES ----------------
-    # Tooltip integrado en el título
+    # ---------------- SECTION 1: SENSORS ----------------
     st.markdown("### 1. 📡 Datos de Sensores", help="Parámetros medidos en campo (Input para Estimación).")
     
     input_spt = dual_input(
@@ -314,10 +320,10 @@ with st.sidebar:
         help_text="Bajos valores = Alta saturación"
     )
     
-    # Cálculo Automático (Ocurre de fondo para tener los valores listos)
+    # Automatic geotechnical parameter estimation running in the background
     est_phi, est_c, est_gamma = calcular_parametros_estimados(input_spt, input_vs, input_resistivity)
 
-    # ---------------- SECCIÓN 2: CONDICIONANTES ----------------
+    # ---------------- SECTION 2: BOUNDARY CONDITIONS ----------------
     st.markdown("---")
     st.markdown("### 2. ⛈️ Condicionantes")
     
@@ -337,11 +343,11 @@ with st.sidebar:
         help="Aceleración sísmica horizontal."
     )
 
-    # ---------------- SECCIÓN 3: LABORATORIO ----------------
+    # ---------------- SECTION 3: LABORATORY DATA ----------------
     st.markdown("---")
     st.markdown("### 3. 🧪 Datos de Laboratorio")
     
-    # Interruptor Principal
+    # Main toggle switch for manual physical properties override
     manual_mode = st.toggle("¿Usar datos de Laboratorio?", value=False, 
                             help="Active esto si tiene valores exactos de Cohesión, Fricción y Peso Unitario. El sistema ignorará los sensores y usará estos datos.")
 
@@ -355,7 +361,7 @@ with st.sidebar:
         source_color = "#00CC96" 
     else:
         st.caption("Modo Manual DESACTIVADO: Usando estimación por sensores.")
-        # Asignamos los valores estimados a las variables finales
+        # Assign estimated parameters to the final variables for physical modeling
         final_c = est_c
         final_phi = est_phi
         final_gamma = est_gamma
@@ -363,14 +369,14 @@ with st.sidebar:
         source_label = "ESTIMACIÓN (CORRELACIÓN)"
         source_color = "#FFA500" 
 
-# --- 4. CÁLCULOS CENTRALES (Usando las variables finales) ---
+# --- 4. CORE COMPUTATIONAL ENGINE ---
 
 input_hw_ratio = input_rain_pct / 100.0
 
-# Calculamos FS usando las variables finales (sean estimadas o manuales)
+# Compute the current Factor of Safety using deterministic Limit Equilibrium calculations
 fs_actual = factor_seguridad_talud_infinito(final_c, final_phi, final_gamma, input_alpha, input_hw_ratio, input_seismic)
 
-# Monte Carlo (Adaptado a la fuente)
+# Monte Carlo Simulation: Introducing Gaussian noise to physical parameters to assess failure probability
 n_sim = 1000
 np.random.seed(42)
 fs_sims = []
@@ -380,7 +386,7 @@ for _ in range(n_sim):
     fs_sims.append(factor_seguridad_talud_infinito(c_s, p_s, final_gamma, input_alpha, input_hw_ratio, input_seismic))
 prob_falla = np.mean(np.array(fs_sims) < 1.1) * 100
 
-# --- 5. VISUALIZACIÓN ---
+# --- 5. REAL-TIME DASHBOARD VISUALIZATION ---
 
 st.title("Sistema de Predicción de Deterioro Geotécnico (AGD)")
 st.markdown(f"Monitorización en tiempo real sector **Cortinas, Toledo**. Escala 1:5000.")
@@ -403,7 +409,7 @@ with col1:
     </div>
     """, unsafe_allow_html=True)
     
-    # VISUALIZACIÓN DE PARÁMETROS CON FUENTE
+    # Render physical parameters emphasizing the active data source
     st.markdown(f"### Parámetros del Suelo")
     st.markdown(f"<small style='color: {source_color}; font-weight: bold;'>FUENTE: {source_label}</small>", unsafe_allow_html=True)
     
@@ -421,7 +427,7 @@ with col2:
                       xaxis_title="Factor de Seguridad", yaxis_title="Frecuencia")
     st.plotly_chart(fig, width="stretch")
 
-# --- 6. MACHINE LEARNING ---
+# --- 6. MACHINE LEARNING PREDICTIVE ENGINE ---
 
 st.markdown("---")
 st.subheader("🤖 Proyección de Deterioro y Recuperación Futuro (IA)")
@@ -431,9 +437,14 @@ btn_col, graph_col = st.columns([1, 3])
 with btn_col:
     st.write("")
     if st.button("EJECUTAR MODELO\nPREDICTIVO AGD"):
-        # Lógica ML
+        
+        # Execute Polynomial Regression Pipeline
+        # Historical temporal data (Features)
         years_hist = np.array([2017, 2018, 2019, 2020, 2021, 2022, 2023]).reshape(-1,1)
+        # Historical Factor of Safety data (Target)
         fs_hist = np.array([1.25, 1.20, 1.10, 1.00, 0.90, 1.05, 1.15])
+        
+        # Append current physical state to training matrix
         X_train = np.vstack([years_hist, [[2026]]])
         y_train = np.append(fs_hist, fs_actual)
         
@@ -442,7 +453,7 @@ with btn_col:
         model = LinearRegression().fit(X_poly, y_train)
         y_pred = model.predict(X_poly)
         
-        # Métricas
+        # Compute standard statistical evaluation metrics
         r2 = r2_score(y_train, y_pred)
         rmse = np.sqrt(mean_squared_error(y_train, y_pred))
         mae = mean_absolute_error(y_train, y_pred)
@@ -465,12 +476,11 @@ with btn_col:
                                 xaxis_title="Año", yaxis_title="Factor de Seguridad", height=450)
             st.plotly_chart(fig_ml, width="stretch")
             
-            # --- CORRECCIÓN LÓGICA DE LA ALERTA ---
             if fs_actual < 1.1:
-                # Caso 1: Falla Inmediata
+                # Case 1: Immediate and persistent critical instability detected
                 st.error(f"⚠️ PREDICCIÓN: Inestabilidad DETECTADA ACTUALMENTE (2026) y persistente en el futuro.")
             else:
-                # Caso 2: Buscar falla futura
+                # Case 2: Project intersection with the critical failure threshold (FS < 1.1)
                 future_risk = years_fut.flatten()[np.where((years_fut.flatten() > 2026) & (fs_fut < 1.1))]
                 if len(future_risk) > 0:
                     st.error(f"⚠️ PREDICCIÓN: Posible inestabilidad detectada a partir del año **{future_risk[0]}**.")
@@ -478,7 +488,4 @@ with btn_col:
                     st.success("✅ PREDICCIÓN: Tendencia estable estimada para los próximos 5 años.")
     else:
         with graph_col:
-
             st.info("👈 Ejecute el modelo para ver la proyección.")
-
-
