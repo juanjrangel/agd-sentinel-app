@@ -9,7 +9,7 @@ This repository contains the source code, predictive models, and deployment conf
 ## 🌐 1. Cloud Deployment (Online Version)
 For universal access, rapid testing, and peer-review evaluation, the application is deployed via Streamlit Cloud. **No local installation is required.**
 
-* **Live App:** [INSERTA_AQUI_TU_LINK_DE_STREAMLIT]
+* **Live App:** https://agd-sentinel.streamlit.app/
 
 ---
 
