@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 # --- 1. PAGE CONFIGURATION AND VISUAL STYLES ---
 st.set_page_config(
-    page_title="AGD-Sentinel | Ingeotecnia",
+    page_title="AGD-Sentinel | Geotechnics",
     page_icon="⛰️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -172,26 +172,26 @@ def get_metric_status(metric_name, value):
     value = round(value, 3) 
     if metric_name == "R2":
         if value >= 0.90:
-            return "#00CC96", "EXCELENTE", "El modelo entiende perfectamente la historia del terreno."
+            return "#00CC96", "EXCELLENT", "The model perfectly understands the terrain's history."
         elif value >= 0.75:
-            return "#FFA500", "ACEPTABLE", "Ajuste razonable, pero hay datos dispersos."
+            return "#FFA500", "ACCEPTABLE", "Reasonable fit, but data is scattered."
         else:
-            return "#FF4B4B", "BAJO", "El dato ingresado contradice la tendencia histórica."
+            return "#FF4B4B", "POOR", "Input data contradicts the historical trend."
     elif metric_name == "RMSE":
         if value <= 0.05:
-            return "#00CC96", "EXCELENTE", "Margen de error mínimo (< 0.05)."
+            return "#00CC96", "EXCELLENT", "Minimal error margin (< 0.05)."
         elif value <= 0.10:
-            return "#FFA500", "ACEPTABLE", "Margen de error moderado."
+            return "#FFA500", "ACCEPTABLE", "Moderate error margin."
         else:
-            return "#FF4B4B", "ALTO", "Alta incertidumbre en la predicción."
+            return "#FF4B4B", "HIGH", "High uncertainty in prediction."
     elif metric_name == "MAE":
         if value <= 0.04:
-            return "#00CC96", "EXCELENTE", "Desviación promedio insignificante."
+            return "#00CC96", "EXCELLENT", "Insignificant average deviation."
         elif value <= 0.08:
-            return "#FFA500", "ACEPTABLE", "Desviación promedio normal."
+            return "#FFA500", "ACCEPTABLE", "Normal average deviation."
         else:
-            return "#FF4B4B", "ALTO", "El modelo no logra conectar bien los puntos."
-    return "#FFFFFF", "N/A", "Sin datos"
+            return "#FF4B4B", "HIGH", "The model fails to connect the data points well."
+    return "#FFFFFF", "N/A", "No data"
 
 def render_led_metric(label, value, metric_type):
     """Generates the HTML string for the custom LED metric indicator."""
@@ -205,7 +205,7 @@ def render_led_metric(label, value, metric_type):
             {value:.3f}
             <div class="led-dot" style="{led_style}">
                 <div class="tooltip-box">
-                    <strong>DIAGNÓSTICO: {status}</strong><br>
+                    <strong>DIAGNOSIS: {status}</strong><br>
                     <hr style="margin: 5px 0; border-color: #ccc;">
                     {desc}
                 </div>
@@ -301,23 +301,23 @@ def dual_input(label, min_val, max_val, default, key_base, step=1.0, help_text=N
     return st.session_state[key_base]
 
 with st.sidebar:
-    st.title("🎛️ Panel de Campo")
+    st.title("🎛️ Field Panel")
     st.markdown("---")
     
     # ---------------- SECTION 1: SENSORS ----------------
-    st.markdown("### 1. 📡 Datos de Sensores", help="Parámetros medidos en campo (Input para Estimación).")
+    st.markdown("### 1. 📡 Sensor Data", help="Field measured parameters (Input for Estimation).")
     
     input_spt = dual_input(
-        "SPT (Golpes N)", 2, 50, 15, "spt", step=1.0,
-        help_text="< 10: Suelo suelto | > 30: Suelo denso"
+        "SPT (N-blows)", 2, 50, 15, "spt", step=1.0,
+        help_text="< 10: Loose soil | > 30: Dense soil"
     )
     input_vs = dual_input(
-        "Velocidad Onda Vs (m/s)", 100, 500, 218, "vs", step=1.0,
-        help_text="Rigidez del suelo. Crítico < 200 m/s"
+        "Shear Wave Velocity Vs (m/s)", 100, 500, 218, "vs", step=1.0,
+        help_text="Soil stiffness. Critical < 200 m/s"
     )
     input_resistivity = dual_input(
-        "Resistividad (Ohm-m)", 10, 500, 200, "res", step=10.0,
-        help_text="Bajos valores = Alta saturación"
+        "Resistivity (Ohm-m)", 10, 500, 200, "res", step=10.0,
+        help_text="Low values = High saturation"
     )
     
     # Automatic geotechnical parameter estimation running in the background
@@ -325,48 +325,48 @@ with st.sidebar:
 
     # ---------------- SECTION 2: BOUNDARY CONDITIONS ----------------
     st.markdown("---")
-    st.markdown("### 2. ⛈️ Condicionantes")
+    st.markdown("### 2. ⛈️ Boundary Conditions")
     
     input_alpha = dual_input(
-        "Pendiente (°)", 5.0, 90.0, 25.0, "alpha", step=1.0
+        "Slope Angle (°)", 5.0, 90.0, 25.0, "alpha", step=1.0
     )
     input_rain_pct = dual_input(
-        "Saturación (%)", 0.0, 100.0, 30.0, "rain", step=5.0
+        "Saturation (%)", 0.0, 100.0, 30.0, "rain", step=5.0
     )
     input_seismic = st.number_input(
-        "Sismo (Coef. k)", 
+        "Seismic (k Coeff.)", 
         min_value=0.0, 
         max_value=1.0, 
         value=0.00, 
         step=0.01,
         format="%.2f",
-        help="Aceleración sísmica horizontal."
+        help="Horizontal seismic acceleration."
     )
 
     # ---------------- SECTION 3: LABORATORY DATA ----------------
     st.markdown("---")
-    st.markdown("### 3. 🧪 Datos de Laboratorio")
+    st.markdown("### 3. 🧪 Laboratory Data")
     
     # Main toggle switch for manual physical properties override
-    manual_mode = st.toggle("¿Usar datos de Laboratorio?", value=False, 
-                            help="Active esto si tiene valores exactos de Cohesión, Fricción y Peso Unitario. El sistema ignorará los sensores y usará estos datos.")
+    manual_mode = st.toggle("Use Laboratory Data?", value=False, 
+                            help="Activate this if you have exact values for Cohesion, Friction, and Unit Weight. The system will ignore sensors and use these data.")
 
     if manual_mode:
-        st.success("Modo Manual ACTIVADO: Ingrese valores abajo.")
-        final_c = st.number_input("Cohesión (c) [kPa]", min_value=0.0, max_value=100.0, value=10.0, step=0.1, format="%.1f")
-        final_phi = st.number_input("Ángulo de Fricción (ϕ) [°]", min_value=0.0, max_value=45.0, value=25.0, step=0.1, format="%.1f")
-        final_gamma = st.number_input("Peso Unitario (γ) [kN/m³]", min_value=10.0, max_value=25.0, value=18.0, step=0.1, format="%.1f")
+        st.success("Manual Mode ACTIVATED: Enter values below.")
+        final_c = st.number_input("Cohesion (c) [kPa]", min_value=0.0, max_value=100.0, value=10.0, step=0.1, format="%.1f")
+        final_phi = st.number_input("Friction Angle (ϕ) [°]", min_value=0.0, max_value=45.0, value=25.0, step=0.1, format="%.1f")
+        final_gamma = st.number_input("Unit Weight (γ) [kN/m³]", min_value=10.0, max_value=25.0, value=18.0, step=0.1, format="%.1f")
         
-        source_label = "LABORATORIO (REAL)"
+        source_label = "LABORATORY (REAL)"
         source_color = "#00CC96" 
     else:
-        st.caption("Modo Manual DESACTIVADO: Usando estimación por sensores.")
+        st.caption("Manual Mode DEACTIVATED: Using sensor estimation.")
         # Assign estimated parameters to the final variables for physical modeling
         final_c = est_c
         final_phi = est_phi
         final_gamma = est_gamma
         
-        source_label = "ESTIMACIÓN (CORRELACIÓN)"
+        source_label = "ESTIMATION (CORRELATION)"
         source_color = "#FFA500" 
 
 # --- 4. CORE COMPUTATIONAL ENGINE ---
@@ -388,19 +388,19 @@ prob_falla = np.mean(np.array(fs_sims) < 1.1) * 100
 
 # --- 5. REAL-TIME DASHBOARD VISUALIZATION ---
 
-st.title("Sistema de Predicción de Deterioro Geotécnico (AGD)")
-st.markdown(f"Monitorización en tiempo real sector **Cortinas, Toledo**. Escala 1:5000.")
+st.title("Geotechnical Degradation Predictive System (AGD)")
+st.markdown(f"Real-time monitoring sector **Cortinas, Toledo**. Scale 1:5000.")
 
 col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.subheader("Estado Actual")
+    st.subheader("Current State")
     if fs_actual < 1.1:
-        color, icon, txt = "#FF4B4B", "🚨", "CRÍTICO"
+        color, icon, txt = "#FF4B4B", "🚨", "CRITICAL"
     elif fs_actual < 1.5:
-        color, icon, txt = "#FFA500", "⚠️", "ALERTA"
+        color, icon, txt = "#FFA500", "⚠️", "WARNING"
     else:
-        color, icon, txt = "#00CC96", "✅", "ESTABLE"
+        color, icon, txt = "#00CC96", "✅", "STABLE"
         
     st.markdown(f"""
     <div style="background-color: {color}; padding: 20px; border-radius: 10px; text-align: center; color: white;">
@@ -410,33 +410,33 @@ with col1:
     """, unsafe_allow_html=True)
     
     # Render physical parameters emphasizing the active data source
-    st.markdown(f"### Parámetros del Suelo")
-    st.markdown(f"<small style='color: {source_color}; font-weight: bold;'>FUENTE: {source_label}</small>", unsafe_allow_html=True)
+    st.markdown(f"### Soil Parameters")
+    st.markdown(f"<small style='color: {source_color}; font-weight: bold;'>SOURCE: {source_label}</small>", unsafe_allow_html=True)
     
     c1, c2 = st.columns(2)
-    c1.metric("Cohesión (c)", f"{final_c} kPa")
-    c1.metric("Peso Unit. (γ)", f"{final_gamma} kN/m³")
-    c2.metric("Fricción (ϕ)", f"{final_phi} °")
-    c2.metric("Prob. Falla", f"{prob_falla:.1f}%")
+    c1.metric("Cohesion (c)", f"{final_c} kPa")
+    c1.metric("Unit Weight (γ)", f"{final_gamma} kN/m³")
+    c2.metric("Friction Angle (ϕ)", f"{final_phi} °")
+    c2.metric("Failure Prob.", f"{prob_falla:.1f}%")
 
 with col2:
-    st.subheader("Distribución de Probabilidad")
+    st.subheader("Probability Distribution")
     fig = px.histogram(x=fs_sims, nbins=40, color_discrete_sequence=['#636EFA'])
     fig.add_vline(x=1.1, line_dash="dash", line_color="red")
     fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white',
-                      xaxis_title="Factor de Seguridad", yaxis_title="Frecuencia")
+                      xaxis_title="Factor of Safety", yaxis_title="Frequency")
     st.plotly_chart(fig, width="stretch")
 
 # --- 6. MACHINE LEARNING PREDICTIVE ENGINE ---
 
 st.markdown("---")
-st.subheader("🤖 Proyección de Deterioro y Recuperación Futuro (IA)")
+st.subheader("🤖 Future Degradation and Recovery Projection (AI)")
 
 btn_col, graph_col = st.columns([1, 3])
 
 with btn_col:
     st.write("")
-    if st.button("EJECUTAR MODELO\nPREDICTIVO AGD"):
+    if st.button("EXECUTE AGD\nPREDICTIVE MODEL"):
         
         # Execute Polynomial Regression Pipeline
         # Historical temporal data (Features)
@@ -458,34 +458,34 @@ with btn_col:
         rmse = np.sqrt(mean_squared_error(y_train, y_pred))
         mae = mean_absolute_error(y_train, y_pred)
         
-        st.markdown("##### Calidad del Ajuste")
-        st.markdown(render_led_metric("R² (Precisión)", r2, "R2"), unsafe_allow_html=True)
+        st.markdown("##### Fit Quality")
+        st.markdown(render_led_metric("R² (Accuracy)", r2, "R2"), unsafe_allow_html=True)
         st.markdown(render_led_metric("RMSE (Error)", rmse, "RMSE"), unsafe_allow_html=True)
-        st.markdown(render_led_metric("MAE (Absoluto)", mae, "MAE"), unsafe_allow_html=True)
+        st.markdown(render_led_metric("MAE (Absolute)", mae, "MAE"), unsafe_allow_html=True)
 
         with graph_col:
             years_fut = np.arange(2017, 2031).reshape(-1,1)
             fs_fut = model.predict(poly.transform(years_fut))
             
             fig_ml = go.Figure()
-            fig_ml.add_trace(go.Scatter(x=years_hist.flatten(), y=fs_hist, mode='markers', name='Histórico'))
-            fig_ml.add_trace(go.Scatter(x=[2026], y=[fs_actual], mode='markers', marker_symbol='star', marker_size=15, name='Actual'))
-            fig_ml.add_trace(go.Scatter(x=years_fut.flatten(), y=fs_fut, mode='lines', name='Tendencia IA'))
+            fig_ml.add_trace(go.Scatter(x=years_hist.flatten(), y=fs_hist, mode='markers', name='Historical'))
+            fig_ml.add_trace(go.Scatter(x=[2026], y=[fs_actual], mode='markers', marker_symbol='star', marker_size=15, name='Current'))
+            fig_ml.add_trace(go.Scatter(x=years_fut.flatten(), y=fs_fut, mode='lines', name='AI Trend'))
             fig_ml.add_hline(y=1.1, line_color="red", line_dash="dash")
             fig_ml.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white',
-                                xaxis_title="Año", yaxis_title="Factor de Seguridad", height=450)
+                                xaxis_title="Year", yaxis_title="Factor of Safety", height=450)
             st.plotly_chart(fig_ml, width="stretch")
             
             if fs_actual < 1.1:
                 # Case 1: Immediate and persistent critical instability detected
-                st.error(f"⚠️ PREDICCIÓN: Inestabilidad DETECTADA ACTUALMENTE (2026) y persistente en el futuro.")
+                st.error(f"⚠️ PREDICTION: Instability CURRENTLY DETECTED (2026) and persistent in the future.")
             else:
                 # Case 2: Project intersection with the critical failure threshold (FS < 1.1)
                 future_risk = years_fut.flatten()[np.where((years_fut.flatten() > 2026) & (fs_fut < 1.1))]
                 if len(future_risk) > 0:
-                    st.error(f"⚠️ PREDICCIÓN: Posible inestabilidad detectada a partir del año **{future_risk[0]}**.")
+                    st.error(f"⚠️ PREDICTION: Possible instability detected starting from the year **{future_risk[0]}**.")
                 else:
-                    st.success("✅ PREDICCIÓN: Tendencia estable estimada para los próximos 5 años.")
+                    st.success("✅ PREDICTION: Stable trend estimated for the next 5 years.")
     else:
         with graph_col:
-            st.info("👈 Ejecute el modelo para ver la proyección.")
+            st.info("👈 Execute the model to view the projection.")
