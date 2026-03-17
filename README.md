@@ -33,7 +33,7 @@ For fieldwork deployment in environments without internet connectivity, or for u
 This package includes a portable Python distribution (WinPython) and requires **zero external configuration**.
 
 **Step-by-step instructions:**
-1. **Download the Full Offline Package:** https://bit.ly/3NHOk6X
+1. **Download the Full Offline Package:** https://bit.ly/4beO4Fv
 2. Extract the downloaded `.zip` folder to your local drive. *(Important: Do not run the software from inside the `.zip` file without extracting it first).*
 3. Open the extracted folder and simply **double-click the `run_AGD_Sentinel.bat` script**.
 4. The batch file is strictly pre-configured to utilize the internal WinPython engine included in the folder. It will automatically isolate system variables, start the local server, and open the application in your browser.
