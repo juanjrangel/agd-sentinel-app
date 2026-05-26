@@ -34,6 +34,15 @@ If Python 3.9 or higher is already installed on your system, the source code can
 
 5. The local server will start automatically, and the interactive dashboard will open in your default web browser.
 
+## 🧪 2.1. Quick Environment Test (Peer-Review)
+
+To comply with reproducibility standards, reviewers can run a lightweight test script to verify the integrity of the mathematical physics engine (LEM) and the Machine Learning polynomial models without launching the full web interface.
+
+From your terminal, in the root directory, run:
+
+```bash
+python test_agd.py
+
 ## 📥 3. Portable Offline Version (For Users Without Python Installed)
 
 For field applications in environments without internet connectivity, or for users who prefer not to install Python and its dependencies manually, a fully isolated and preconfigured offline environment has been packaged (approximately 700 MB).
