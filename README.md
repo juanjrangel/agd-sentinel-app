@@ -72,12 +72,12 @@ For field applications in environments without internet connectivity, a fully is
 
 ```text
 /.devcontainer         Codespace configuration
+LICENSE                Software license (MIT)
+README.md              Project documentation
 app.py                 Main Streamlit application
 quick_test.py          Automated test script (Cortinas dataset)
 requirements.txt       Python dependencies
 run_AGD_Sentinel.bat   Windows execution script
-README.md              Project documentation
-LICENSE                Software license (MIT)
 ```
 
 ## ⚠️ Disclaimer
