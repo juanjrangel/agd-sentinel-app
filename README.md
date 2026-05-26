@@ -52,7 +52,7 @@ To fulfill rapid testing requirements and verify the underlying physics-informed
 
 For field applications in environments without internet connectivity, a fully isolated and preconfigured offline environment has been packaged (approximately 700 MB).
 
-1. Download the complete offline package: https://bit.ly/4beO4Fv
+1. Download the complete offline package: https://www.dropbox.com/scl/fo/jmno52o6nv2f3ujq7prfq/AD9Serks9dcd2FZe9MAW9To?rlkey=lw9hajcv47s6wdxkrk0gkllcx&e=1&dl=0
 
 2. Extract the downloaded `.zip` folder.
 
