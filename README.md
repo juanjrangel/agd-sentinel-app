@@ -41,7 +41,8 @@ To comply with reproducibility standards, reviewers can run a lightweight test s
 From your terminal, in the root directory, run:
 
 ```bash
-python test_agd.py```
+python test_agd.py
+```bash
 
 ## 📥 3. Portable Offline Version (For Users Without Python Installed)
 
