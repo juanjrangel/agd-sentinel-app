@@ -43,7 +43,7 @@ To fulfill rapid testing requirements and verify the underlying physics-informed
 2. Execute the test script:
 
    ```text
-   python quick_test.py
+   python reproducibility_test.py
    ```
 
 3. The console will output the prediction report, demonstrating the temporal FS degradation and failure year projection using the Cortinas case study baseline data.
@@ -71,13 +71,13 @@ For field applications in environments without internet connectivity, a fully is
 ## 📂 Repository Structure
 
 ```text
-/.devcontainer         Codespace configuration
-LICENSE                Software license (MIT)
-README.md              Project documentation
-app.py                 Main Streamlit application
-quick_test.py          Automated test script (Cortinas dataset)
-requirements.txt       Python dependencies
-run_AGD_Sentinel.bat   Windows execution script
+/.devcontainer             Codespace configuration
+LICENSE                    Software license (MIT)
+README.md                  Project documentation
+app.py                     Main Streamlit application
+reproducibility_test.py    Automated test script (Cortinas dataset)
+requirements.txt           Python dependencies
+run_AGD_Sentinel.bat       Windows execution script
 ```
 
 ## ⚠️ Disclaimer
