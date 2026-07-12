@@ -2,7 +2,7 @@
 
 AGD-Sentinel is an open-source hybrid deterministic-statistical software framework designed to project the temporal degradation of infinite slopes. The framework integrates pseudo-static Limit Equilibrium Methods (LEM) with polynomial regression machine learning algorithms to estimate the temporal decline of the Factor of Safety (FS).
 
-This repository contains the source code, predictive models, and deployment configurations referenced in our manuscript submitted to *Computers & Geosciences*.
+This repository contains the source code, predictive models, and deployment configurations referenced in our manuscript submitted to *Results in Engineering*.
 
 ## 🌐 1. Cloud Deployment (Online Version)
 
@@ -32,21 +32,17 @@ If Python 3.9 or higher is already installed on your system, the source code can
 
    * **Option B:** Execute the command `streamlit run app.py` directly from the terminal.
 
-## ⚡ 3. Automated Quick Test (Reviewer Example)
+## 📊 3. Automated Scripts (Reviewer Reproducibility)
 
-To fulfill rapid testing requirements and verify the underlying physics-informed polynomial engine without launching the full web interface, an automated test script is provided.
+To fulfill rapid testing requirements and verify the underlying physics-informed polynomial engine, the specific scripts below are provided. Each script reproduces specific figures and metrics from the manuscript:
 
-**To run the test:**
+* `master_run.py` (seed 42): Reproduces Figs. 2, 3, 6 + master_metrics.json
+* `reviewer_analyses.py` (seed 7): Reproduces Figs. 4, 8, 9; baselines (Table 2); Sobol values
+* `missing_analyses.py` (seed 11): Reproduces Fig. 7 (PDP); critical-region, coverage, timings
+* `agd_corrected.py` (seed 2026): Reproduces Supplementary Figs. S1-S3
+* `deterioration_laws.py` (deterministic, no seed): Reproduces Fig. 5 (fig_laws.png)
 
-1. Navigate to the repository folder in your terminal.
-
-2. Execute the test script:
-
-   ```text
-   python reproducibility_test.py
-   ```
-
-3. The console will output the prediction report, demonstrating the temporal FS degradation and failure year projection using the Cortinas case study baseline data.
+For detailed data configuration, literature sources, and methodology context required by the reviewers, please refer strictly to the `README_data.md` file included in this repository.
 
 ## 📥 4. Portable Offline Version (No Python Required)
 
@@ -71,13 +67,22 @@ For field applications in environments without internet connectivity, a fully is
 ## 📂 Repository Structure
 
 ```text
-/.devcontainer             Codespace configuration
-LICENSE                    Software license (MIT)
-README.md                  Project documentation
-app.py                     Main Streamlit application
-reproducibility_test.py    Automated test script (Cortinas dataset)
-requirements.txt           Python dependencies
-run_AGD_Sentinel.bat       Windows execution script
+/.devcontainer                 Codespace configuration
+LICENSE                        Software license (MIT)
+README.md                      Main project documentation
+README_data.md                 Reviewer documentation and configuration details
+agd_corrected.py               Supplementary analysis script
+app.py                         Main Streamlit application
+cortinas_campaign_data.csv     Geotechnical campaign data
+cortinas_config.json           Model configuration and seeds
+deterioration_laws.py          Alternative deterioration laws script
+fig_laws.png                   Alternative laws figure
+master_metrics.json            Consolidated outputs
+master_run.py                  Main manuscript figures script
+missing_analyses.py            Reviewer specific checks script
+requirements.txt               Python dependencies
+reviewer_analyses.py           Sensitivity and baseline analyses script
+run_AGD_Sentinel.bat           Windows execution script
 ```
 
 ## ⚠️ Disclaimer
