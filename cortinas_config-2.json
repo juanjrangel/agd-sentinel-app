@@ -1,0 +1,42 @@
+{
+ "site": "Cortinas, Toledo, Norte de Santander, Colombia",
+ "documented_failure": "2021-08",
+ "geometry_ranges": {
+  "z_m": [
+   8,
+   16
+  ],
+  "z_reference_m": 13,
+  "beta_deg": [
+   26,
+   34
+  ],
+  "beta_reference_deg": 30
+ },
+ "unit_weight_kNm3": {
+  "mean": 19.68,
+  "std": 0.5
+ },
+ "field_implied_rates_2017_2021": {
+  "alpha_kPa_per_yr": 1.6,
+  "delta_deg_per_yr": 2.375
+ },
+ "observation_noise_sigma_FS": 0.05,
+ "monte_carlo": {
+  "N": 1000,
+  "rho_c_phi": -0.62,
+  "rho_documented_range": [
+   -0.5,
+   -0.7
+  ]
+ },
+ "seeds": {
+  "master_run": 42,
+  "reviewer_analyses": 7,
+  "missing_analyses": 11,
+  "agd_corrected_supplementary": 2026,
+  "deterioration_laws": "deterministic"
+ },
+ "note_geometry": "z_reference_m is the model failure-surface depth (2021 surface ~13 m), sampled over z_m; NOT the specimen sampling depth in the CSV.",
+ "note_rates": "Field-implied from measured 2017->2021 states; matches revised manuscript Section 2.3."
+}
