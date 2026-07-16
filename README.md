@@ -34,7 +34,7 @@ If Python 3.9 or higher is already installed on your system, the source code can
 
 ## 📊 3. Automated Scripts (Reviewer Reproducibility)
 
-To fulfill rapid testing requirements and verify the underlying physics-informed polynomial engine, the specific scripts below are provided. Each script reproduces specific figures and metrics from the manuscript:
+To fulfill rapid testing requirements and verify the underlying physics-guided polynomial engine, the specific scripts below are provided. Each script reproduces specific figures and metrics from the manuscript:
 
 * `master_run.py` (seed 42): Reproduces Figs. 2, 3, 6 + master_metrics.json
 * `reviewer_analyses.py` (seed 7): Reproduces Figs. 4, 8, 9; baselines (Table 2); Sobol values
@@ -60,7 +60,7 @@ For field applications in environments without internet connectivity, a fully is
 
 * Pseudo-static infinite slope stability analysis
 * Time-dependent geotechnical degradation functions
-* Polynomial regression (degree *n = 3*)
+* Low-order polynomial regression (*n = 2*, cross-validated; method shown insensitive to degree)
 * Monte Carlo uncertainty propagation
 * Interactive visualization through Streamlit and Plotly
 
@@ -95,7 +95,7 @@ If you use AGD-Sentinel in academic work, please cite:
 
 > Buenahora Ballesteros, C.A., 2026.
 >
-> **AGD-Sentinel v1.0: Physics-informed temporal slope failure projection framework.**
+> **AGD-Sentinel v1.0: Physics-guided temporal slope-stability projection framework.**
 
 ## 📄 License
 
