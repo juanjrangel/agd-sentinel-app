@@ -41,6 +41,7 @@ To fulfill rapid testing requirements and verify the underlying physics-guided p
 * `missing_analyses.py` (seed 11): Reproduces Fig. 7 (PDP); critical-region, coverage, timings
 * `agd_corrected.py` (seed 2026): Reproduces Supplementary Figs. S1-S3
 * `deterioration_laws.py` (deterministic, no seed): Reproduces Fig. 5 (fig_laws.png)
+* `resubmission_analyses.py`: Reproduces recalibrated global sensitivity (fig_sobol.png)
 
 For detailed data configuration, literature sources, and methodology context required by the reviewers, please refer strictly to the `README_data.md` file included in this repository.
 
@@ -77,10 +78,12 @@ cortinas_campaign_data.csv     Geotechnical campaign data
 cortinas_config.json           Model configuration and seeds
 deterioration_laws.py          Alternative deterioration laws script
 fig_laws.png                   Alternative laws figure
+fig_sobol.png                  Recalibrated global sensitivity figure
 master_metrics.json            Consolidated outputs
 master_run.py                  Main manuscript figures script
 missing_analyses.py            Reviewer specific checks script
 requirements.txt               Python dependencies
+resubmission_analyses.py       Recalibrated sensitivity analyses script
 reviewer_analyses.py           Sensitivity and baseline analyses script
 run_AGD_Sentinel.bat           Windows execution script
 ```
