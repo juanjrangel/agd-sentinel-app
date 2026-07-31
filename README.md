@@ -34,14 +34,14 @@ If Python 3.9 or higher is already installed on your system, the source code can
 
 ## 📊 3. Automated Scripts (Reviewer Reproducibility)
 
-To fulfill rapid testing requirements and verify the underlying physics-guided polynomial engine, the specific scripts below are provided. Each script reproduces specific figures and metrics from the manuscript:
+To fulfill rapid testing requirements and verify the underlying physics-guided polynomial engine, the specific scripts below are provided. Each script reproduces specific figures and metrics from the manuscript. *(Note: Figs. 1–3 represent field evidence and architecture diagrams, and are not script-generated).*
 
-* `master_run.py` (seed 42): Reproduces Figs. 2, 3, 6 + master_metrics.json
-* `reviewer_analyses.py` (seed 7): Reproduces Figs. 4, 8, 9; baselines (Table 2); Sobol values
-* `missing_analyses.py` (seed 11): Reproduces Fig. 7 (PDP); critical-region, coverage, timings
+* `master_run.py` (seed 42): Reproduces Figs. 4, 5 + master_metrics.json
+* `reviewer_analyses.py` (seed 7): Reproduces Figs. 6, 10, 11; baselines (Table 2)
+* `deterioration_laws.py` (deterministic, no seed): Reproduces Fig. 7 (fig_laws.png)
+* `resubmission_analyses.py` (seed 7): Reproduces Fig. 8 (fig_sobol.png)
+* `missing_analyses.py` (seed 11): Reproduces Fig. 9 (PDP); critical-region, coverage, timings
 * `agd_corrected.py` (seed 2026): Reproduces Supplementary Figs. S1-S3
-* `deterioration_laws.py` (deterministic, no seed): Reproduces Fig. 5 (fig_laws.png)
-* `resubmission_analyses.py`: Reproduces recalibrated global sensitivity (fig_sobol.png)
 
 For detailed data configuration, literature sources, and methodology context required by the reviewers, please refer strictly to the `README_data.md` file included in this repository.
 
@@ -77,8 +77,8 @@ app.py                         Main Streamlit application
 cortinas_campaign_data.csv     Geotechnical campaign data
 cortinas_config.json           Model configuration and seeds
 deterioration_laws.py          Alternative deterioration laws script
-fig_laws.png                   Alternative laws figure
-fig_sobol.png                  Recalibrated global sensitivity figure
+fig_laws.png                   Alternative laws figure (Fig. 7)
+fig_sobol.png                  Recalibrated global sensitivity figure (Fig. 8)
 master_metrics.json            Consolidated outputs
 master_run.py                  Main manuscript figures script
 missing_analyses.py            Reviewer specific checks script
